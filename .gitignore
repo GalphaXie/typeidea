@@ -108,3 +108,6 @@ venv.bak/
 
 # venv
 typeidea-env
+
+# swp
+.swp
