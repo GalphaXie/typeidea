@@ -14,7 +14,6 @@ class Category(models.Model):
     )
     name = models.CharField(max_length=50, verbose_name="名称", help_text="名称")
     status = models.PositiveSmallIntegerField(default=STATUS_NORMAL, choices=STATUS_ITEMS, verbose_name="状态", help_text="状态")
-    what = models.PositiveSmallIntegerField(max_length=200, verbose_name="名称", help_text="名称")
     is_nav = models.BooleanField(default=False, verbose_name="是否为导航")
     owner = models.ForeignKey(User, verbose_name="作者")
     created_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
