@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from .models import Post, Category, Tag
 from .adminforms import PostAdminForm
+from typeidea.custom_site import custom_site
 
 
 class CategorayOwnerFilter(admin.SimpleListFilter):
@@ -28,7 +29,7 @@ class PostInline(admin.TabularInline):  # StackedInline 样式不同
     model = Post
 
 
-@admin.register(Category)
+@admin.register(Category, site=custom_site)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "status", "is_nav", "created_time", "post_count")
     fields = ('name', 'status', 'is_nav')
@@ -50,7 +51,7 @@ class CategoryAdmin(admin.ModelAdmin):
         return qs.filter(owner=request.user)
 
 
-@admin.register(Tag)
+@admin.register(Tag, site=custom_site)
 class TagAdmin(admin.ModelAdmin):
     list_display = ("name", "status", "created_time")
     fields = ('name', 'status')
@@ -60,7 +61,7 @@ class TagAdmin(admin.ModelAdmin):
         return super(TagAdmin, self).save_model(request, obj, form, change)
 
 
-@admin.register(Post)
+@admin.register(Post, site=custom_site)
 class PostAdmin(admin.ModelAdmin):
 
     form = PostAdminForm
@@ -113,7 +114,7 @@ class PostAdmin(admin.ModelAdmin):
     def operator(self, obj):
         return format_html(
             '<a href="{}">编辑</a>',
-            reverse('admin:blog_post_change', args=(obj.id,))
+            reverse('cus_admin:blog_post_change', args=(obj.id,))
         )
 
     operator.short_description = "操作"
