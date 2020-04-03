@@ -22,11 +22,19 @@ class CategorayOwnerFilter(admin.SimpleListFilter):
         return queryset
 
 
+class PostInline(admin.TabularInline):  # StackedInline 样式不同
+    fiedls = ('title', 'desc')
+    extra = 1  # 控制额外多几个
+    model = Post
+
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "status", "is_nav", "created_time", "post_count")
     fields = ('name', 'status', 'is_nav')
     list_filter = [CategorayOwnerFilter]
+
+    inlines = [PostInline, ]
 
     def save_model(self, request, obj, form, change):
         obj.owner = request.user
