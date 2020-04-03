@@ -28,6 +28,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "typeidea",  # 增加这个 App
     "blog",
     "config",
     "comment",
