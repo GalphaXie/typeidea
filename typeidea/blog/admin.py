@@ -5,6 +5,7 @@ from django.urls import reverse
 from .models import Post, Category, Tag
 from .adminforms import PostAdminForm
 from typeidea.custom_site import custom_site
+from typeidea.base_admin import BaseOwnerAdmin
 
 
 class CategorayOwnerFilter(admin.SimpleListFilter):
@@ -30,49 +31,35 @@ class PostInline(admin.TabularInline):  # StackedInline 样式不同
 
 
 @admin.register(Category, site=custom_site)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "status", "is_nav", "created_time", "post_count")
+class CategoryAdmin(BaseOwnerAdmin):
+    list_display = ("name", "status", "is_nav", "created_time", "post_count", "owner")
     fields = ('name', 'status', 'is_nav')
     list_filter = [CategorayOwnerFilter]
 
     inlines = [PostInline, ]
-
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(CategoryAdmin, self).save_model(request, obj, form, change)
 
     def post_count(self, obj):
         return obj.post_set.count()  # FK关联, 一对多 obj.多类小写_set
 
     post_count.short_description = "文章数量"
 
-    def get_queryset(self, request):
-        qs = super(CategoryAdmin, self).get_queryset(request)
-        return qs.filter(owner=request.user)
-
 
 @admin.register(Tag, site=custom_site)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BaseOwnerAdmin):
     list_display = ("name", "status", "created_time")
     fields = ('name', 'status')
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(TagAdmin, self).save_model(request, obj, form, change)
-
 
 @admin.register(Post, site=custom_site)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(BaseOwnerAdmin):
 
     form = PostAdminForm
 
-    list_display = ("title", "category", "status", "created_time", "operator", "owner")  # operator 是自定义字段
+    list_display = ("title", "category", "status", "created_time", "operator")  # operator 是自定义字段
     list_display_links = []  # 那些字段可以作为链接.
 
     list_filter = [CategorayOwnerFilter]  # 可以加双下划线的方式添加属性;这里控制的是右侧的过滤栏
     search_fields = ['title', 'category__name']  # 这里是双下划线, 可见字段可以是 FK关联的 类__字段名
-
-    exclude = ('owner', )
 
     actions_on_top = True
     actions_on_bottom = True
@@ -118,14 +105,6 @@ class PostAdmin(admin.ModelAdmin):
         )
 
     operator.short_description = "操作"
-
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(PostAdmin, self).save_model(request, obj, form, change)
-
-    def get_queryset(self, request):
-        qs = super(PostAdmin, self).get_queryset(request)
-        return qs.filter(owner=request.user)
 
     class Media:
         css = {
