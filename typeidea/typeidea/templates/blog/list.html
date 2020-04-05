@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Typeidea 博客系统</title>
 </head>
 <body>
+    {% if tag %}
+        标签页： {{ tag.name }}
+    {% endif %}
+
+    {% if category %}
+        分类页：{{ category.name }}
+    {% endif %}
     <ul>
         {% for post in post_list %}
         <li>
