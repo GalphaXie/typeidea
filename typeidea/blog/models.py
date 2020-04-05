@@ -83,6 +83,9 @@ class Post(models.Model):
     tag = models.ManyToManyField(Tag, verbose_name="标签")  # many to many
     owner = models.ForeignKey(User, verbose_name="作者")
     created_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    # add pv and uv , statistic the interview frequency
+    pv = models.PositiveIntegerField(default=1)
+    nv = models.PositiveIntegerField(default=1)
 
     class Meta:
         verbose_name = verbose_name_plural = "文章"
@@ -116,3 +119,6 @@ class Post(models.Model):
     def latest_posts(cls):
         return cls.objects.filter(status=cls.STATUS_NORMAL)
 
+    @classmethod
+    def hot_posts(cls):
+        return cls.objects.filter(status=cls.STATUS_NORMAL).order_by("-pv").only("id", "title")
