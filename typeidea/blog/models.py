@@ -24,6 +24,16 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def get_navs(cls):
+        categories = cls.objects.filter(status=cls.STATUS_NORMAL)
+        nav_categories = categories.filter(category__is_nav=True)
+        normal_categories = categories.filter(category__is_nav=False)
+        return {
+            "navs": nav_categories,
+            "normal_categories": normal_categories
+        }
+
 
 class Tag(models.Model):
     """标签"""
@@ -97,3 +107,4 @@ class Post(models.Model):
     @classmethod
     def latest_posts(cls):
         return cls.objects.filter(status=cls.STATUS_NORMAL)
+
