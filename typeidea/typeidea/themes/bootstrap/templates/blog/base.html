@@ -63,10 +63,9 @@
         <div class="container">
             <hr/>
             <nav class="nav category">
-                {% for cate in categories %}
+                {% for cate in normal_categories %}
                     <a href="{% url 'category-list' cate.id %}" class="nav-link">{{ cate.name }}</a>
                 {% endfor %}
-
             </nav>
         </div>
         <div class="container power">
