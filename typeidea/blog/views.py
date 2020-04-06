@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, ListView
 
@@ -62,3 +63,18 @@ class PostDetailView(CommonViewMixin, DetailView):
     context_object_name = "post"
     pk_url_kwarg = "post_id"
 
+
+class SearchView(IndexView):
+    def get_context_data(self, **kwargs):
+        context = super(SearchView, self).get_context_data(**kwargs)
+        context.update({
+            "keyword": self.request.GET.get("keyword", "")
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = super(SearchView, self).get_queryset()  # type: Post.objects.all()
+        keyword = self.request.GET.get("keyword")
+        if not keyword:
+            return queryset
+        return queryset.filter(Q(title__icontains=keyword) | Q(desc__icontains=keyword))
