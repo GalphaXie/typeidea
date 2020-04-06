@@ -86,7 +86,7 @@ class Post(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     # add pv and uv , statistic the interview frequency
     pv = models.PositiveIntegerField(default=1)
-    nv = models.PositiveIntegerField(default=1)
+    uv = models.PositiveIntegerField(default=1)
 
     class Meta:
         verbose_name = verbose_name_plural = "文章"
