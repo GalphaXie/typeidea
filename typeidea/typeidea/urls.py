@@ -15,10 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.sitemaps import views as sitemap_views
 
+from blog.rss import LatestPostFeed
+from blog.sitemap import PostSitemap
+from comment.views import CommentView
 from .custom_site import custom_site
 from blog.views import PostDetailView, IndexView, CategoryView, TagView, SearchView, AuthorView
-from config.views import links
+from config.views import LinkListView
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name="index"),
@@ -27,7 +31,11 @@ urlpatterns = [
     url(r'^post/(?P<post_id>\d+).html$', PostDetailView.as_view(), name="post-detail"),
     url(r'^search/$', SearchView.as_view(), name="search"),
     url(r'^author/(?P<owner_id>\d+)/$', AuthorView.as_view(), name="author"),
-    url(r'^links/$', links, name='links'),
+    url(r'^links/$', LinkListView.as_view(), name='links'),
+    url(r'^comment/$', CommentView.as_view(), name="comment"),
+
+    url(r'^rss|feed/', LatestPostFeed(), name='rss'),
+    url(r'^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
     url(r'^super_admin/', admin.site.urls, name='super-admin'),
     url(r'^admin/', custom_site.urls, name='admin'),
 ]
