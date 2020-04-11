@@ -20,7 +20,6 @@ class CategorayOwnerFilter(RelatedFieldListFilter):
         super().__init__(field, request, params, model, model_admin, field_path)
         # 重新获取 lookup_choices, 根据 owner 过滤
         self.lookup_choices = Category.objects.filter(owner=request.user).values_list("id", "name")
-        print(self.lookup_choices)
 
 
 class PostInline:  # StackedInline 样式不同

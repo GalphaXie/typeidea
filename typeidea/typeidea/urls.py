@@ -21,6 +21,7 @@ from django.contrib.sitemaps import views as sitemap_views
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
 from comment.views import CommentView
+from typeidea.autocomplete import CategoryAutocomplete, TagAutocomplete
 from .custom_site import custom_site
 from blog.views import PostDetailView, IndexView, CategoryView, TagView, SearchView, AuthorView
 from config.views import LinkListView
@@ -40,4 +41,8 @@ urlpatterns = [
     url(r'^super_admin/', admin.site.urls, name='super-admin'),
     # url(r'^admin/', custom_site.urls, name='admin'),
     url(r'^admin/', include(xadmin.site.urls), name='xadmin'),
+    url(r'^category-autocomplete/$', CategoryAutocomplete.as_view(), name="category-autocomplete"),
+    url(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name="tag-autocomplete"),
+
+
 ]
