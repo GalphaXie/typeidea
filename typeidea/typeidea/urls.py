@@ -22,7 +22,6 @@ from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
 from comment.views import CommentView
 from typeidea.autocomplete import CategoryAutocomplete, TagAutocomplete
-from .custom_site import custom_site
 from blog.views import PostDetailView, IndexView, CategoryView, TagView, SearchView, AuthorView
 from config.views import LinkListView
 
