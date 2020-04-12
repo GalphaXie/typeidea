@@ -55,7 +55,7 @@ class SideBar(models.Model):
 
     @classmethod
     def get_all(cls):
-        return cls.objects.filter(display_type=cls.STATUS_SHOW)
+        return cls.objects.filter(status=cls.STATUS_SHOW)
 
     @property
     def content_html(self):
