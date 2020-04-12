@@ -19,13 +19,19 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps import views as sitemap_views
+from rest_framework.documentation import include_docs_urls
+from rest_framework.routers import DefaultRouter
 
+from blog.apis import PostViewSet
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
 from comment.views import CommentView
 from typeidea.autocomplete import CategoryAutocomplete, TagAutocomplete
 from blog.views import PostDetailView, IndexView, CategoryView, TagView, SearchView, AuthorView
 from config.views import LinkListView
+
+router = DefaultRouter()
+router.register(r'post', PostViewSet, basename="api-post")
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name="index"),
@@ -46,4 +52,8 @@ urlpatterns = [
     url(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name="tag-autocomplete"),
 
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+
+    url(r'^api/', include(router.urls, namespace='api')),
+    url(r'^api/docs/', include_docs_urls(title='typeidea apis', description="CORE API DOCUMENTS")),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
