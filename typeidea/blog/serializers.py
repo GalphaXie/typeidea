@@ -3,15 +3,16 @@ from rest_framework import serializers, pagination
 from blog.models import Post, Category
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.HyperlinkedModelSerializer):  # 也可以直接继承ModelSerializer
     category = serializers.SlugRelatedField(slug_field='name', read_only=True)
     tag = serializers.SlugRelatedField(many=True, slug_field='name', read_only=True)
     owner = serializers.SlugRelatedField(read_only=True, slug_field='username')
     created_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    url = serializers.HyperlinkedIdentityField(view_name="api:api-post-detail")
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'category', 'tag', 'owner', 'created_time']
+        fields = ['url', 'id', 'title', 'category', 'tag', 'owner', 'created_time']
 
 
 class PostDetailSerializer(PostSerializer):
