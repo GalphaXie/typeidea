@@ -1,6 +1,5 @@
 from .base import *  # NOQA
 
-REDIS_URL = os.environ.get("REDIS_URL", '127.0.0.1:6379:1')
 
 DEBUG = False
 
@@ -24,10 +23,10 @@ DATABASES = {
 CACHES = {
     'default': {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL,
+        "LOCATION": os.environ.get("REDIS_URL", '127.0.0.1:6379:1'),
         "TIMEOUT": 300,
         "OPTIONS": {
-            # 'PASSWORD': '<password>',
+            'PASSWORD': os.environ.get("", ""),
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'PARSER_CLASS': 'redis.connection.HiredisParser',
         },
