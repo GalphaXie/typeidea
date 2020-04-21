@@ -19,6 +19,7 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps import views as sitemap_views
+from django.views.decorators.cache import cache_page
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 
@@ -35,26 +36,37 @@ router.register(r'post', PostViewSet, basename="api-post")
 router.register(r'category', CategoryViewSet, basename="api-category")
 
 urlpatterns = [
-    url(r'^$', IndexView.as_view(), name="index"),
-    url(r'^category/(?P<category_id>\d+)/$', CategoryView.as_view(), name="category-list"),
-    url(r'^tag/(?P<tag_id>\d+)/$', TagView.as_view(), name="tag-list"),
-    url(r'^post/(?P<post_id>\d+).html$', PostDetailView.as_view(), name="post-detail"),
-    url(r'^search/$', SearchView.as_view(), name="search"),
-    url(r'^author/(?P<owner_id>\d+)/$', AuthorView.as_view(), name="author"),
-    url(r'^links/$', LinkListView.as_view(), name='links'),
-    url(r'^comment/$', CommentView.as_view(), name="comment"),
+                  url(r'^$', IndexView.as_view(), name="index"),
+                  url(r'^category/(?P<category_id>\d+)/$', CategoryView.as_view(), name="category-list"),
+                  url(r'^tag/(?P<tag_id>\d+)/$', TagView.as_view(), name="tag-list"),
+                  url(r'^post/(?P<post_id>\d+).html$', PostDetailView.as_view(), name="post-detail"),
+                  url(r'^search/$', SearchView.as_view(), name="search"),
+                  url(r'^author/(?P<owner_id>\d+)/$', AuthorView.as_view(), name="author"),
+                  url(r'^links/$', LinkListView.as_view(), name='links'),
+                  url(r'^comment/$', CommentView.as_view(), name="comment"),
 
-    url(r'^rss|feed/', LatestPostFeed(), name='rss'),
-    url(r'^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
-    url(r'^super_admin/', admin.site.urls, name='super-admin'),
-    # url(r'^admin/', custom_site.urls, name='admin'),
-    url(r'^admin/', include(xadmin.site.urls), name='xadmin'),
-    url(r'^category-autocomplete/$', CategoryAutocomplete.as_view(), name="category-autocomplete"),
-    url(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name="tag-autocomplete"),
+                  url(r'^rss|feed/', LatestPostFeed(), name='rss'),
+                  # url(r'^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
+                  url(r'^sitemap\.xml$', cache_page(60 * 20, key_prefix="sitemap_cache_")(sitemap_views.sitemap),
+                      {'sitemaps': {"posts": PostSitemap}}),
+                  url(r'^super_admin/', admin.site.urls, name='super-admin'),
+                  # url(r'^admin/', custom_site.urls, name='admin'),
+                  url(r'^admin/', include(xadmin.site.urls), name='xadmin'),
+                  url(r'^category-autocomplete/$', CategoryAutocomplete.as_view(), name="category-autocomplete"),
+                  url(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name="tag-autocomplete"),
 
-    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+                  url(r'^ckeditor/', include('ckeditor_uploader.urls')),
 
-    url(r'^api/', include(router.urls, namespace='api')),
-    url(r'^api/docs/', include_docs_urls(title='typeidea apis', description="CORE API DOCUMENTS")),
+                  url(r'^api/', include(router.urls, namespace='api')),
+                  url(r'^api/docs/', include_docs_urls(title='typeidea apis', description="CORE API DOCUMENTS")),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    # import debug_toolbar
+    urlpatterns += [
+        # url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]
+    urlpatterns += [
+        url(r'^silk/', include('silk.urls', namespace="silk"))
+    ]
