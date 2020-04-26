@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'v25#s=)kg=nq6&p(=(&a$6)-9w&^#r0nrhkr%-2(*th=1hya+t'
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 ALLOWED_HOSTS = []
 
@@ -124,7 +124,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/tmp/static'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'themes', THEMES, 'static')
