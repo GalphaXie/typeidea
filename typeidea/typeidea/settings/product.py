@@ -20,10 +20,12 @@ DATABASES = {
     },
 }
 
+REDIS_URL = os.environ.get("REDIS_URL", '127.0.0.1:6379:1')
+
 CACHES = {
     'default': {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.environ.get("REDIS_URL", '127.0.0.1:6379:1'),
+        "LOCATION": REDIS_URL,
         "TIMEOUT": 300,
         "OPTIONS": {
             'PASSWORD': os.environ.get("REDIS_PASSWORD", ""),
@@ -47,8 +49,6 @@ ADMINS = MANAGERS = (
 
 STATIC_ROOT = '/tmp/static'
 
-
-REDIS_URL = '127.0.0.1:6379:1'
 
 LOGGING = {
     'version': 1,
