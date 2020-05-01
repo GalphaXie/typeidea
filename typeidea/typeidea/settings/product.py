@@ -47,7 +47,8 @@ ADMINS = MANAGERS = (
 # DEFAULT_FROM_EMAIL = '<邮件展示发件人的地址>'
 # SERVER_EMAIL = '<邮件服务器>'
 
-STATIC_ROOT = '/tmp/static'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 
 
 LOGGING = {
