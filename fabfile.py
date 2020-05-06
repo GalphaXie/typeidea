@@ -10,14 +10,14 @@ from fabric.decorators import task
 
 
 env.roledefs = {
-    'myserver': ['guang@172.17.0.4:11022'],
+    'myserver': ['root@127.0.0.1:22'],
 }
 env.PROJECT_NAME = 'typeidea'
 env.SETTINGS_BASE = 'typeidea/typeidea/settings/base.py'
 env.DEPLOY_PATH = '/home/user/venvs/typeidea-env'
 env.VENV_ACTIVATE = os.path.join(env.DEPLOY_PATH, 'bin', 'activate')
-env.PYPI_HOST = '172.17.0.4'
-env.PYPI_INDEX = 'http://172.17.0.4:18080/simple'
+env.PYPI_HOST = '127.0.0.1'
+env.PYPI_INDEX = 'http://127.0.0.1:18080/simple'
 env.PROCESS_COUNT = 2
 env.PORT_PREFIX = 909
 
@@ -102,7 +102,7 @@ def deploy(version, profile):
     _ensure_virtualenv()
     package_name = env.PROJECT_NAME + '==' + version
     with prefix('source %s' % env.VENV_ACTIVATE):
-        run('pip install %s -i %s --trusted-host %s' % (
+        run('pip install %s --extra-index %s --trusted-host %s' % (
             package_name,
             env.PYPI_INDEX,
             env.PYPI_HOST,

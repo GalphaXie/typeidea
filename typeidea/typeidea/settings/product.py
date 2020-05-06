@@ -3,14 +3,12 @@ from .base import *  # NOQA
 
 DEBUG = False
 
-ALLOWED_HOSTS = ["typeidea.com"]
-
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.environ["DB_NAME"],
         'HOST': os.environ["DB_HOST"],
-        'PORT': os.environ["DB_PORT"],
+        'PORT': int(os.environ.get("DB_PORT", 3306)),
         'USER': os.environ["DB_USER"],
         'PASSWORD': os.environ["DB_PASSWORD"],
         'CONN_MAX_AGE': os.environ.get("CONN_MAX_AGE", 60),
@@ -37,7 +35,7 @@ CACHES = {
 }
 
 ADMINS = MANAGERS = (
-    ("姓名", "<邮件地址>"),
+    ("defaulttest", "defaulttest@sina.com"),
 )
 
 # EMAIL_HOST = '<邮件smtp服务地址>'
@@ -47,9 +45,7 @@ ADMINS = MANAGERS = (
 # DEFAULT_FROM_EMAIL = '<邮件展示发件人的地址>'
 # SERVER_EMAIL = '<邮件服务器>'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
-
+STATIC_ROOT = '/home/user/venvs/typeidea-env/static_files/'
 
 LOGGING = {
     'version': 1,
@@ -69,7 +65,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/tmp/logs/typeidea.log',
+            'filename': 'typeidea.log',
             'formatter': 'default',
             'maxBytes': 1024 * 1024,  # 1M
             'backupCount': 5,
@@ -84,3 +80,4 @@ LOGGING = {
         },
     }
 }
+

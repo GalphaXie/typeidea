@@ -10,9 +10,7 @@ https://docs.djangoproject.com/en/1.11/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
-import dotenv
 
-dotenv.read_dotenv("../conf/.env")
 
 profile = os.environ.get('TYPEIDEA_PROFILE', 'develop')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "typeidea.settings.%s" % profile)
