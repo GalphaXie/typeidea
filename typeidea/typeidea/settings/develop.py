@@ -6,6 +6,7 @@ dotenv.read_dotenv("/home/user/venvs/typeidea-env/conf/.env")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+ALLOWED_HOSTS = ["*"]
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -36,7 +37,7 @@ MIDDLEWARE += [
 ]
 
 INTERNAL_IPS = ['127.0.0.1']
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_files/')
+STATIC_ROOT = os.path.join("/home/user/venvs/typeidea-env", 'static_files')
 
 LOGGING = {
     'version': 1,
